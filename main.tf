@@ -40,6 +40,6 @@ resource "azurerm_linux_virtual_machine" "this" {
 
 resource "azurerm_network_interface_application_gateway_backend_address_pool_association" "this" {
   network_interface_id    = azurerm_network_interface.this.id
-  ip_configuration_name   = azurerm_linux_virtual_machine.this.name
+  ip_configuration_name   = azurerm_network_interface.this.ip_configuration[0].name
   backend_address_pool_id = var.application_gateway_backend_pool_id
 }
