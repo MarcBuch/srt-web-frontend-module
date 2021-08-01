@@ -49,3 +49,8 @@ variable "image" {
     version   = string
   })
 }
+
+variable "application_gateway_backend_pool_id" {
+  description = "Application gateway backend pool to associate the VM to"
+  type        = string
+}
