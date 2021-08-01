@@ -35,9 +35,3 @@ jobs:
         
       - name: Terraform validate
         run: terraform validate
-
-      - name: Terraform plan
-        run: |
-          export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}
-          export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }}
-          terraform plan -var-file=ci.tfvars
