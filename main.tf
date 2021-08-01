@@ -1,15 +1,3 @@
-resource "azurerm_network_interface" "this" {
-  name                = "${var.prefix}-vm00-nic0"
-  location            = var.region
-  resource_group_name = var.resource_group_name
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = var.subnet_id
-    private_ip_address_allocation = "Dynamic"
-  }
-}
-
 resource "azurerm_linux_virtual_machine_scale_set" "this" {
   name                = "${var.prefix}-vmss"
   resource_group_name = var.resource_group_name
@@ -21,10 +9,12 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
   network_interface {
     name    = "${var.prefix}-vmss-nic"
     primary = true
+
     ip_configuration {
-      name      = "internal"
-      primary   = true
-      subnet_id = var.subnet_id
+      name                                         = "internal"
+      primary                                      = true
+      subnet_id                                    = var.subnet_id
+      application_gateway_backend_address_pool_ids = [var.application_gateway_backend_pool_id]
     }
   }
 
@@ -44,10 +34,4 @@ resource "azurerm_linux_virtual_machine_scale_set" "this" {
     sku       = var.image.sku
     version   = var.image.version
   }
-}
-
-resource "azurerm_network_interface_application_gateway_backend_address_pool_association" "this" {
-  network_interface_id    = azurerm_network_interface.this.id
-  ip_configuration_name   = azurerm_network_interface.this.ip_configuration[0].name
-  backend_address_pool_id = var.application_gateway_backend_pool_id
 }
